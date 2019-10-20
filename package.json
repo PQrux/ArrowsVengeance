@@ -1,0 +1,28 @@
+{
+  "name": "phaser-quickstart",
+  "version": "1.0.0",
+  "description": "Um projeto totalmente em português do Brasil para facilitar a criação de projetos com Phaser 3, utilizando webpack.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack-dev-server",
+    "start:production": "webpack && live-server public --open=index.html"
+  },
+  "author": "PQrux",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "live-server": "^1.2.1",
+    "raw-loader": "^3.1.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
+  },
+  "dependencies": {
+    "phaser": "^3.20.1"
+  }
+}

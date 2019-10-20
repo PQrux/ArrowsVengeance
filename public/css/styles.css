@@ -1,0 +1,13 @@
+/*
+    Fique a vontade para personalizar a tela do seu jogo! :D
+*/
+body{
+    display: flex;
+    display: -webkit-flex;
+}
+#game{
+    display: flex;
+    display: -webkit-flex;
+    flex: 1;
+    justify-content: center;
+}
