@@ -4,6 +4,7 @@
 body{
     display: flex;
     display: -webkit-flex;
+    background-color: black;
 }
 #game{
     display: flex;

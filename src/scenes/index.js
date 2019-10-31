@@ -1,5 +1,5 @@
-import Inicio from "./Inicio";
+import Floresta from "./Floresta";
 
 export {
-    Inicio,
+    Floresta,
 }
