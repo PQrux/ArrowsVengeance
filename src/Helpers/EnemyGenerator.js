@@ -1,13 +1,14 @@
 import * as Phaser from "phaser";
+import Sprite from "../Models/Sprite";
 
 export default class EnemyGenerator{
     /**
      * 
      * @param {Phaser.Scene} scene 
-     * @param {Object<string,string>} lacaioKeys 
-     * @param {Object<string,string>} monstroKeys 
-     * @param {Object<string,string>} aberracaoKeys 
-     * @param {Object<string,string>} mensageiroKeys 
+     * @param {Object<string,Sprite>} lacaioKeys 
+     * @param {Object<string,Sprite>} monstroKeys 
+     * @param {Object<string,Sprite>} aberracaoKeys 
+     * @param {Object<string,Sprite>} mensageiroKeys 
      */
     constructor(scene, lacaioKeys, monstroKeys, aberracaoKeys, mensageiroKeys){
         this.scene = scene;
@@ -26,6 +27,7 @@ export default class EnemyGenerator{
         enemy.setDepth(10);
         enemy.setScrollFactor(0,0);
         this[group].add(enemy);
+        enemy.anims.play(`${key}_walk`,true);
         return enemy;
     }
 }

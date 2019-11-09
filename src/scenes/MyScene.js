@@ -2,6 +2,7 @@ import * as Phaser from "phaser";
 import { Chunk } from "../Helpers";
 import arsImg from "../assets/images/ars.png";
 import arrow from "../assets/images/arrow.png";
+import SpriteSheetManager from "../Helpers/SpriteSheetManager";
 
 export default class MyScene extends Phaser.Scene{
     /**
@@ -10,7 +11,7 @@ export default class MyScene extends Phaser.Scene{
      */
     constructor(config,chunkSize,tileSize,cameraSpeed){
         super(config);
-
+        this.ssManager = new SpriteSheetManager(this);
         this.chunkSize = chunkSize||6.3;
         //Tamanho dos tiles.
         this.tileSize = tileSize||32;
