@@ -8,6 +8,12 @@ class MyGame extends Phaser.Game{
             parent: "game",
             width: 800,
             height: 600,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    debug: false
+                }
+            },
             //Você pode adicionar mais telas ao seu jogo aqui!
             scene: [
                 Floresta,

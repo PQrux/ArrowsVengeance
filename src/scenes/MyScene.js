@@ -41,9 +41,13 @@ export default class MyScene extends Phaser.Scene{
         this.chunks = [];
         //Cor de fundo da camera.
         this.cameras.main.setBackgroundColor("#FFFFFF");
+        //Cria grupos
+        this.grupoJogador = this.physics.add.group();
+        this.grupoFlechas = this.physics.add.group();
         if(!this.isJogadorCriado){
-            this.criarJogador();
+            this.grupoJogador.add(this.criarJogador());
         }
+        
         this.jogador.anims.play("player_run",true);
     }
     update(){
@@ -51,6 +55,7 @@ export default class MyScene extends Phaser.Scene{
         this.followPoint.y -= this.cameraSpeed;
         this.cameras.main.centerOn(this.followPoint.x,this.followPoint.y);
         this.criarFlecha();
+        this.moverFlechas(5);
     }
     getChunk(x, y) {
         var chunk = null;
@@ -147,16 +152,39 @@ export default class MyScene extends Phaser.Scene{
         });
 
         this.isJogadorCriado = true;
+        return this.jogador;
     }
     criarFlecha(){
         if(this.game.input.activePointer.leftButtonDown() && this.flechaCriavel){
             this.flechaCriavel = false;
-            let flecha = this.add.sprite(this.jogador.x, this.jogador.y,"arrow");
+            this.delayCriado = false;
+            let flecha = this.physics.add.sprite(this.jogador.x, this.jogador.y,"arrow");
+            this.grupoFlechas.add(flecha);
             flecha.setDepth(11);
             flecha.setScrollFactor(0,0);
         }
-        if(this.game.input.activePointer.leftButtonReleased() && !this.flechaCriavel){
-            this.flechaCriavel = true;
+        if(this.game.input.activePointer.leftButtonReleased() && !this.flechaCriavel && !this.delayCriado){
+            this.delayCriado = true;
+            setTimeout(() => {
+                console.log("Permitindo "+this.flechaCriavel);
+                this.flechaCriavel = true;
+            }, 150);
         }
+    }
+    /**
+     * Realiza a movimentação das flechas.
+     * @param {number} speed Velocidade de movimentação das flechas.
+     */
+    moverFlechas(speed){
+        this.grupoFlechas.children.iterate((flecha)=>{
+            if(flecha){
+                if(flecha.body.y < -20){
+                    flecha.destroy();
+                }
+                else{
+                    flecha.body.y = flecha.body.y-speed;
+                }
+            }
+        })
     }
 }
