@@ -12,13 +12,16 @@ export default class Inicio extends MyScene{
         super.preload();
         this.load.image("terra",terra);
         this.load.image("grama",grama);
-        this.ssManager.useAsset(this.ssManager.list.undeadking);
+        this.lacaios = [
+            this.ssManager.useAsset(this.ssManager.list.undeadking),
+        ]
+        
     }
     create(){
         super.create("grama","terra");
         this.ssManager.createAnims();
-        this.eg = new EnemyGenerator(this, this.grupoJogador, this.grupoFlechas, this.ssManager.used);
-        let inimigo = this.eg.createEnemy("lacaios",20,20,"undeadking");
+        this.eg = new EnemyGenerator(this, this.grupoJogador, this.grupoFlechas, this.lacaios);
+        let inimigo = this.eg.createEnemy("lacaios", 0,0,0);
     }
     update(){
         super.update();

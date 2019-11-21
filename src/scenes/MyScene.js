@@ -3,6 +3,8 @@ import { Chunk } from "../Helpers";
 import arsImg from "../assets/images/ars.png";
 import arrow from "../assets/images/arrow.png";
 import SpriteSheetManager from "../Helpers/SpriteSheetManager";
+import Being from "../Models/Being";
+import multiStorager from "../Helpers/MultiStorager";
 
 export default class MyScene extends Phaser.Scene{
     /**
@@ -19,6 +21,8 @@ export default class MyScene extends Phaser.Scene{
         this.cameraSpeed = cameraSpeed||4;
         this.isJogadorCriado = false;
         this.flechaCriavel = true;
+        this.gameOver = false;
+        this.gamePaused = false;
     }
     preload(){
         this.load.spritesheet({key: "ars", url: arsImg, frameConfig: { frameHeight: 60, frameWidth: 23.875 }});
@@ -51,11 +55,13 @@ export default class MyScene extends Phaser.Scene{
         this.jogador.anims.play("player_run",true);
     }
     update(){
-        this.loadChunk();
-        this.followPoint.y -= this.cameraSpeed;
-        this.cameras.main.centerOn(this.followPoint.x,this.followPoint.y);
-        this.criarFlecha();
-        this.moverFlechas(5);
+        if(!this.gameOver && !this.gamePaused){
+            this.loadChunk();
+            this.followPoint.y -= this.cameraSpeed;
+            this.cameras.main.centerOn(this.followPoint.x,this.followPoint.y);
+            this.criarFlecha();
+            this.moverFlechas(5);
+        }
     }
     getChunk(x, y) {
         var chunk = null;
@@ -128,7 +134,8 @@ export default class MyScene extends Phaser.Scene{
         return true;
     }
     criarJogador(){
-        this.jogador = this.add.sprite((this.game.config.width/2)-23.875,this.game.config.height-60,"ars");
+        this.jogador = new Being(this, (this.game.config.width/2)-23.875,this.game.config.height-60,"ars",1,true);
+        this.jogador.setOnDidDie(()=>{this.gameOver = true});
         this.jogador.setScrollFactor(0,0);
         this.jogador.setDepth(10);
         this.anims.create({

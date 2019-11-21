@@ -1,5 +1,6 @@
 import * as Phaser from "phaser";
 import { Floresta } from "./scenes";
+import multiStorager from "./Helpers/MultiStorager";
 class MyGame extends Phaser.Game{
     constructor(){
         //Passa para o super a game config como parametro!
@@ -19,6 +20,7 @@ class MyGame extends Phaser.Game{
                 Floresta,
             ]
         })
+        multiStorager.DataStorager.set("vidas",3);
     }
 }
 //Inicializa o jogo.

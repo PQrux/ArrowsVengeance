@@ -15,6 +15,7 @@ export default class Being extends Phaser.Physics.Arcade.Sprite{
      */
     constructor(scene, x, y, texture, hp, imortal){
         super(scene, x, y, texture);
+        this.isBeing = true;
         this.scene.add.existing(this);
         this.hp = hp;
         this.imortal = imortal;

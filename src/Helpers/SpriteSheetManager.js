@@ -24,6 +24,7 @@ export default class SpriteSheetManager{
             this.scene.load.spritesheet(sprite.nome, sprite.arquivo, { frameWidth: sprite.width, frameHeight: sprite.height });
             this.used[sprite.nome] = sprite;
         }
+        return sprite.nome;
     }
     createAnims(){
         for(let key in this.used){
