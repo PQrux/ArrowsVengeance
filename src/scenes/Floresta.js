@@ -21,7 +21,8 @@ export default class Inicio extends MyScene{
         super.create("grama","terra");
         this.ssManager.createAnims();
         this.eg = new EnemyGenerator(this, this.grupoJogador, this.grupoFlechas, this.lacaios, [], [], [], this.jogador.body.position);
-        let inimigo = this.eg.createEnemy("lacaios", 0,0,0);
+        
+        let inimigo = this.eg.createEnemy("lacaios", 0,0,0, 0, EnemyGenerator.behaviors().circulador);
     }
     update(){
         super.update();
