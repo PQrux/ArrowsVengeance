@@ -54,6 +54,12 @@ export default class Being extends Phaser.Physics.Arcade.Sprite{
     onDidDie(being){
     }
     /**
+     * Método para ser sobrescrito
+     * @param {Being} being 
+     */
+    onHit(being){
+    }
+    /**
      * 
      * @param {function(Being)} callback 
      */
@@ -67,9 +73,17 @@ export default class Being extends Phaser.Physics.Arcade.Sprite{
     setOnDidDie(callback){
         this.onDidDie = callback;
     }
+    /**
+     * 
+     * @param {function(Being)} callback 
+     */
+    setOnHit(callback){
+        this.onHit = callback;
+    }
     hit(damage){
         if(!this.imortal){
             this.hp = this.hp - damage;
+            this.onHit(this);
             if(this.hp <= 0){
                 this.onWillDie(this);
                 this.die();

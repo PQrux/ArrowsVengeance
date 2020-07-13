@@ -5,6 +5,7 @@ import arrow from "../assets/images/arrow.png";
 import SpriteSheetManager from "../Helpers/SpriteSheetManager";
 import Being from "../Models/Being";
 import multiStorager from "../Helpers/MultiStorager";
+import hearth from "../assets/images/hearth.png";
 
 export default class MyScene extends Phaser.Scene{
     /**
@@ -27,6 +28,7 @@ export default class MyScene extends Phaser.Scene{
     preload(){
         this.load.spritesheet({key: "ars", url: arsImg, frameConfig: { frameHeight: 60, frameWidth: 23.875 }});
         this.load.image("arrow", arrow);
+        this.load.image("hearth_vida", hearth);
     }
     /**
      * 
@@ -51,8 +53,17 @@ export default class MyScene extends Phaser.Scene{
         if(!this.isJogadorCriado){
             this.grupoJogador.add(this.criarJogador());
         }
-        
+        this.createUi();
         this.jogador.anims.play("player_run",true);
+    }
+    startCounter(){
+        this.counter = new Date();
+    }
+    getCounterSeconds(){
+        return (new Date() - this.counter) / 1000;
+    }
+    getCounterMilliseconds(){
+        return (new Date() - this.counter);
     }
     update(){
         if(!this.gameOver && !this.gamePaused){
@@ -62,6 +73,22 @@ export default class MyScene extends Phaser.Scene{
             this.criarFlecha();
             this.moverFlechas(5);
         }
+    }
+    createUi(){
+        let vidas = multiStorager.DataStorager.get("vidas");
+        if(typeof vidas !== "number"){
+            multiStorager.DataStorager.set("vidas",3);
+            vidas = 3;
+        }
+        if(!this.vidasText){
+            this.add.image(20,20,"hearth_vida").setDepth(20).setScrollFactor(0,0);
+            this.vidasText = this.add.text(40,10, "x"+vidas, {fontSize: 20});
+            this.vidasText.setScrollFactor(0,0);
+            this.vidasText.setDepth(20);
+            this.vidasText.setColor("red");
+            multiStorager.DataStorager.addListener("vidas", this.createUi.bind(this));
+        }
+        this.vidasText.setText("x"+vidas);
     }
     getChunk(x, y) {
         var chunk = null;
@@ -133,9 +160,30 @@ export default class MyScene extends Phaser.Scene{
         }
         return true;
     }
-    criarJogador(){
-        this.jogador = new Being(this, (this.game.config.width/2)-23.875,this.game.config.height-60,"ars",1,true);
-        this.jogador.setOnDidDie(()=>{this.gameOver = true});
+    criarJogador(x, y){
+        let vidas = multiStorager.DataStorager.get("vidas")||3;
+        this.jogador = new Being(this, x||(this.game.config.width/2)-23.875,y||this.game.config.height-60,"ars", vidas,false);
+        this.jogador.setOnDidDie(()=>{
+            this.gameOver = true;
+            let text = this.add.text(0,0, "GAME OVER",{color: "red", fontSize: 50, boundsAlignH: "center", boundsAlignV: "middle"})
+            .setScrollFactor(0,0).setDepth(20);
+            text.setPosition((this.game.config.width/2)-text.getBounds().width)
+        });
+        let piscar = this.add.tween({
+            duration: 300,
+            repeat: 4,
+            ease: "Linear",
+            targets: [this.jogador],
+            alpha: 1,
+            paused: true,
+            onComplete: ()=>{this.jogador.imortal = false}
+        })
+        this.jogador.setOnHit((jogador)=>{
+            jogador.imortal = true;
+            multiStorager.DataStorager.set("vidas", jogador.hp);
+            jogador.setAlpha(0);
+            piscar.play();
+        })
         this.jogador.setScrollFactor(0,0);
         this.jogador.setDepth(10);
         this.anims.create({

@@ -28,7 +28,7 @@ export default class EnemyGenerator{
             inimigos: this.scene.physics.add.group(),
             lacaios: this.scene.physics.add.group(),
             monstros: this.scene.physics.add.group(),
-            aberrecoes: this.scene.physics.add.group(),
+            aberracoes: this.scene.physics.add.group(),
             mensageiros: this.scene.physics.add.group(),
         };
         this.groups.inimigos.runChildUpdate = true;
@@ -124,6 +124,10 @@ export default class EnemyGenerator{
         else y = position;
 
         let enemy = new Being(this.scene,x,y,key, EnemyGenerator.hpGroups()[group],(group === "mensageiros" ? true : false));
+        //hotfix
+        if(group === "lacaios"){
+            enemy.setScale(2);
+        }
         enemy.setDepth(10);
         enemy.setScrollFactor(0,0);
         enemy.addGroups(this.groups.inimigos);
@@ -446,7 +450,7 @@ export default class EnemyGenerator{
         return {
             lacaios: 1,
             monstros: 2,
-            aberrecoes: 3,
+            aberracoes: 3,
             mensageiros: 4,
             1: "lacaios",
             2: "monstros",
